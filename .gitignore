@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.env
+.klov-data/
+.pgdata/
+test-results/
+playwright-report/
+coverage/
