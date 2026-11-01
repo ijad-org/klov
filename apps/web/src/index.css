@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/*
+ * Design tokens. Status colors are a fixed, reserved scale and always ship with
+ * an icon and a text label. Stacked charts order them failed → flaky → passed →
+ * skipped, the order whose adjacent pairs stay distinguishable under color
+ * vision deficiency.
+ */
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f2f1ed;
+  --ink: #0b0b0b;
+  --ink-secondary: #52514e;
+  --ink-muted: #75736e;
+  --grid: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+  --accent: #2a78d6;
+  --accent-wash: rgba(42, 120, 214, 0.1);
+
+  --status-passed: #0ca30c;
+  --status-failed: #d03b3b;
+  --status-flaky: #fab219;
+  --status-broken: #ec835a;
+  --status-skipped: #a8a79f;
+  --status-running: #2a78d6;
+  --status-success-text: #006300;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --surface-raised: #222220;
+  --surface-sunken: #141413;
+  --ink: #f0efec;
+  --ink-secondary: #c3c2b7;
+  --ink-muted: #8f8d86;
+  --grid: #2c2c2a;
+  --baseline: #383835;
+  --border: rgba(255, 255, 255, 0.1);
+  --accent: #3987e5;
+  --accent-wash: rgba(57, 135, 229, 0.16);
+
+  --status-skipped: #6b6a65;
+  --status-running: #3987e5;
+  --status-success-text: #0ca30c;
+}
+
+@theme inline {
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-raised: var(--surface-raised);
+  --color-sunken: var(--surface-sunken);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-secondary);
+  --color-ink-3: var(--ink-muted);
+  --color-grid: var(--grid);
+  --color-baseline: var(--baseline);
+  --color-line: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-wash: var(--accent-wash);
+
+  --color-passed: var(--status-passed);
+  --color-failed: var(--status-failed);
+  --color-flaky: var(--status-flaky);
+  --color-broken: var(--status-broken);
+  --color-skipped: var(--status-skipped);
+  --color-running: var(--status-running);
+  --color-success-text: var(--status-success-text);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ANSI colors in Playwright error messages and snippets. */
+.ansi-red { color: #d03b3b; }
+.ansi-green { color: #0a8a0a; }
+.ansi-yellow { color: #a86b00; }
+.ansi-blue { color: #2a78d6; }
+.ansi-magenta { color: #b4428a; }
+.ansi-cyan { color: #11809a; }
+.ansi-gray { color: var(--ink-muted); }
+[data-theme="dark"] .ansi-red { color: #f07070; }
+[data-theme="dark"] .ansi-green { color: #3fc43f; }
+[data-theme="dark"] .ansi-yellow { color: #f2c14e; }
+[data-theme="dark"] .ansi-blue { color: #6aa8f0; }
+[data-theme="dark"] .ansi-magenta { color: #e37ab5; }
+[data-theme="dark"] .ansi-cyan { color: #4cc3dd; }
+.ansi-bold { font-weight: 600; }
+.ansi-dim { opacity: 0.7; }
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 var(--accent-wash); }
+  70% { box-shadow: 0 0 0 6px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.live-pulse {
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-pulse {
+    animation: none;
+  }
+}
