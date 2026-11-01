@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO test_steps (id, execution_id, parent_step_id, title, category, started_at)\n                   SELECT x.id, x.execution_id,\n                          CASE WHEN x.parent_step_id IS NULL THEN NULL\n                               WHEN x.parent_step_id = ANY($2::uuid[]) THEN x.parent_step_id\n                               WHEN EXISTS (SELECT 1 FROM test_steps p WHERE p.id = x.parent_step_id) THEN x.parent_step_id\n                          END,\n                          x.title, x.category, x.started_at\n                   FROM jsonb_to_recordset($1::jsonb) AS x(id uuid, execution_id uuid, parent_step_id uuid, title text,\n                        category text, started_at timestamptz)\n                   WHERE EXISTS (SELECT 1 FROM test_executions e WHERE e.id = x.execution_id)\n                   ON CONFLICT (id) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Jsonb",
+        "UuidArray"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "cf7a1d9f2535b1cb071bfad6625f98ab6c5427c1481af59de2b4a5c9803c74e1"
+}

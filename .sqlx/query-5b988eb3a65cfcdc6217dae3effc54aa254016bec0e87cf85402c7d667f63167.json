@@ -1,0 +1,256 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, launch_id, playwright_test_id, fingerprint, title, file_path, line, suite_path, browser_project,\n                  worker_index, parallel_index, shard_index, retry_attempt, status, duration_ms, error_message,\n                  error_cluster_hash, annotations AS \"annotations: Json<AllureAnnotations>\", started_at, ended_at\n           FROM test_executions WHERE id = ANY($1)",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "launch_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "launch_id"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "playwright_test_id",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "playwright_test_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "fingerprint",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "fingerprint"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "title",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "title"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "file_path",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "file_path"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "line",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "line"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "suite_path",
+        "type_info": "TextArray",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "suite_path"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "browser_project",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "browser_project"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "worker_index",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "worker_index"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "parallel_index",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "parallel_index"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "shard_index",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "shard_index"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "retry_attempt",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "retry_attempt"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "status",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "status"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "duration_ms",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "duration_ms"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "error_message",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "error_message"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "error_cluster_hash",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "error_cluster_hash"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "annotations: Json<AllureAnnotations>",
+        "type_info": "Jsonb",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "annotations"
+          }
+        }
+      },
+      {
+        "ordinal": 18,
+        "name": "started_at",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "started_at"
+          }
+        }
+      },
+      {
+        "ordinal": 19,
+        "name": "ended_at",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "ended_at"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "UuidArray"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "5b988eb3a65cfcdc6217dae3effc54aa254016bec0e87cf85402c7d667f63167"
+}

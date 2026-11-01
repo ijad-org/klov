@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO launch_shards (launch_id, shard_index, total_tests, started_at) VALUES ($1, $2, $3, $4)\n           ON CONFLICT (launch_id, shard_index) DO UPDATE SET\n               total_tests = EXCLUDED.total_tests, started_at = EXCLUDED.started_at, status = NULL, ended_at = NULL",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int4",
+        "Int4",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "8c832251836e4ad63c79eea43cf8a885e7bcc9c5fded37b2f69d0b3aa7d47eae"
+}

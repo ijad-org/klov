@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE test_executions t SET superseded = true\n                   FROM jsonb_to_recordset($1::jsonb) AS x(launch_id uuid, playwright_test_id text, retry_attempt int)\n                   WHERE t.launch_id = x.launch_id AND t.playwright_test_id = x.playwright_test_id\n                     AND t.retry_attempt < x.retry_attempt AND NOT t.superseded",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Jsonb"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b81469fb51c1fc7fc9ce5e503343a5d078c7c68c22870cee091c25c5e98fc12f"
+}

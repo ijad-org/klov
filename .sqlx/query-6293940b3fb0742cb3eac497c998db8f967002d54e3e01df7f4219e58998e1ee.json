@@ -1,0 +1,162 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT e.id, e.launch_id, e.title, e.file_path, e.browser_project, e.status, e.duration_ms,\n                  e.retry_attempt, e.error_message, e.started_at, l.build_number, l.branch\n           FROM test_executions e JOIN launches l ON l.id = e.launch_id\n           WHERE e.project_id = $1 AND e.fingerprint = $2 AND NOT e.superseded\n           ORDER BY e.started_at DESC LIMIT $3",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "launch_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "launch_id"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "title",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "title"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "file_path",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "file_path"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "browser_project",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "browser_project"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "status",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "status"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "duration_ms",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "duration_ms"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "retry_attempt",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "retry_attempt"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "error_message",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "error_message"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "started_at",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "started_at"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "build_number",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "build_number"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "branch",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "branch"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true
+    ]
+  },
+  "hash": "6293940b3fb0742cb3eac497c998db8f967002d54e3e01df7f4219e58998e1ee"
+}

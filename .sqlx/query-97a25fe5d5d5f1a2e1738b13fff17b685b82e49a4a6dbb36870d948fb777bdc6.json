@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE test_executions t SET\n                       status = CASE WHEN x.status = 'passed' AND t.retry_attempt > 0 THEN 'flaky' ELSE x.status END,\n                       duration_ms = x.duration_ms, error_message = x.error_message, error_stack = x.error_stack,\n                       error_snippet = x.error_snippet, error_cluster_hash = x.error_cluster_hash,\n                       stdout = x.stdout, stderr = x.stderr, ended_at = x.ended_at\n                   FROM jsonb_to_recordset($1::jsonb) AS x(id uuid, status text, duration_ms int, error_message text,\n                        error_stack text, error_snippet text, error_cluster_hash text, stdout text[], stderr text[],\n                        ended_at timestamptz)\n                   WHERE t.id = x.id",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Jsonb"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "97a25fe5d5d5f1a2e1738b13fff17b685b82e49a4a6dbb36870d948fb777bdc6"
+}

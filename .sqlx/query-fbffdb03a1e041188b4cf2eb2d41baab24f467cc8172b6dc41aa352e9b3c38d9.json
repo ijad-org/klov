@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO launch_shards (launch_id, shard_index, status, ended_at)\n                   SELECT x.launch_id, x.shard_index, x.status, x.ended_at\n                   FROM jsonb_to_recordset($1::jsonb) AS x(launch_id uuid, shard_index int, status text, ended_at timestamptz)\n                   JOIN launches l ON l.id = x.launch_id\n                   ON CONFLICT (launch_id, shard_index) DO UPDATE SET status = EXCLUDED.status, ended_at = EXCLUDED.ended_at",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Jsonb"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "fbffdb03a1e041188b4cf2eb2d41baab24f467cc8172b6dc41aa352e9b3c38d9"
+}

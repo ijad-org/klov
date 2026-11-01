@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO test_executions (id, launch_id, project_id, fingerprint, playwright_test_id, title, file_path,\n                       line, suite_path, browser_project, worker_index, parallel_index, shard_index, retry_attempt,\n                       annotations, started_at)\n                   SELECT x.id, x.launch_id, l.project_id, x.fingerprint, x.playwright_test_id, x.title, x.file_path,\n                          x.line, x.suite_path, x.browser_project, x.worker_index, x.parallel_index, x.shard_index,\n                          x.retry_attempt, x.annotations, x.started_at\n                   FROM jsonb_to_recordset($1::jsonb) AS x(id uuid, launch_id uuid, fingerprint text,\n                        playwright_test_id text, title text, file_path text, line int, suite_path text[],\n                        browser_project text, worker_index int, parallel_index int, shard_index int,\n                        retry_attempt int, annotations jsonb, started_at timestamptz)\n                   JOIN launches l ON l.id = x.launch_id\n                   ON CONFLICT (id) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Jsonb"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "54850b71204ddfc42ef96c391beb4d39408bf01d7403b20fd397269341f840ef"
+}

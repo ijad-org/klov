@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE launches SET completed_shards =\n             (SELECT count(*)::int FROM launch_shards WHERE launch_id = $1 AND ended_at IS NOT NULL)\n         WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b6cbada7ac29ae3090b600584cd890f9b2294d540b28a3120f67202aa4e5c3d9"
+}

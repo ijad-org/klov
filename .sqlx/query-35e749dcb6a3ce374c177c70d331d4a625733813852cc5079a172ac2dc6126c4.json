@@ -1,0 +1,239 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT l.id, l.project_id, p.slug AS project_slug, l.ci_run_id, l.build_number, l.branch, l.commit_sha,\n                  l.status, l.total_tests, l.passed_count, l.failed_count, l.flaky_count, l.skipped_count,\n                  l.running_count, l.total_shards, l.completed_shards, l.started_at, l.ended_at,\n                  (EXTRACT(EPOCH FROM (l.ended_at - l.started_at)) * 1000)::bigint AS \"duration_ms?\"\n           FROM launches l JOIN projects p ON p.id = l.project_id\n           WHERE l.id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "project_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "project_id"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "project_slug",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "projects",
+            "name": "slug"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "ci_run_id",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "ci_run_id"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "build_number",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "build_number"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "branch",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "branch"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "commit_sha",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "commit_sha"
+          }
+        }
+      },
+      {
+        "ordinal": 7,
+        "name": "status",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "status"
+          }
+        }
+      },
+      {
+        "ordinal": 8,
+        "name": "total_tests",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "total_tests"
+          }
+        }
+      },
+      {
+        "ordinal": 9,
+        "name": "passed_count",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "passed_count"
+          }
+        }
+      },
+      {
+        "ordinal": 10,
+        "name": "failed_count",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "failed_count"
+          }
+        }
+      },
+      {
+        "ordinal": 11,
+        "name": "flaky_count",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "flaky_count"
+          }
+        }
+      },
+      {
+        "ordinal": 12,
+        "name": "skipped_count",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "skipped_count"
+          }
+        }
+      },
+      {
+        "ordinal": 13,
+        "name": "running_count",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "running_count"
+          }
+        }
+      },
+      {
+        "ordinal": 14,
+        "name": "total_shards",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "total_shards"
+          }
+        }
+      },
+      {
+        "ordinal": 15,
+        "name": "completed_shards",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "completed_shards"
+          }
+        }
+      },
+      {
+        "ordinal": 16,
+        "name": "started_at",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "started_at"
+          }
+        }
+      },
+      {
+        "ordinal": 17,
+        "name": "ended_at",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "ended_at"
+          }
+        }
+      },
+      {
+        "ordinal": 18,
+        "name": "duration_ms?",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      null
+    ]
+  },
+  "hash": "35e749dcb6a3ce374c177c70d331d4a625733813852cc5079a172ac2dc6126c4"
+}

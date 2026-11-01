@@ -1,0 +1,44 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT count(*) FILTER (WHERE ended_at IS NOT NULL)::int AS \"done!\",\n                              COALESCE(bool_or(status IN ('interrupted', 'timedout')), false) AS \"interrupted!\",\n                              COALESCE(bool_or(status = 'failed'), false) AS \"failed!\",\n                              max(ended_at) AS ended_at\n                       FROM launch_shards WHERE launch_id = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "done!",
+        "type_info": "Int4",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 1,
+        "name": "interrupted!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "failed!",
+        "type_info": "Bool",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "ended_at",
+        "type_info": "Timestamptz",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "5a96bd0455ae1e3e1a5ead0b02b7e90da708aa40981255a179e27c53b3559e46"
+}

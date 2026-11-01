@@ -1,0 +1,65 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT a.id, a.s3_key, a.execution_id, e.launch_id\n           FROM artifacts a JOIN test_executions e ON e.id = a.execution_id\n           WHERE a.id = ANY($1) AND e.project_id = $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "artifacts",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "s3_key",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "artifacts",
+            "name": "s3_key"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "execution_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "artifacts",
+            "name": "execution_id"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "launch_id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "launch_id"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "UuidArray",
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "af8d335f6ae1bfdc90fa8aeb46e156d9d1ef64575dad1e351bf96a877ae19c08"
+}

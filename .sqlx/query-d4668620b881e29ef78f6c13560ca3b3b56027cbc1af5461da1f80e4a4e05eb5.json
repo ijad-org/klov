@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE test_steps s SET status = CASE WHEN e.status IN ('passed', 'flaky') THEN 'passed' ELSE 'interrupted' END,\n                       ended_at = e.ended_at\n                   FROM test_executions e\n                   WHERE s.execution_id = e.id AND e.id = ANY($1) AND s.ended_at IS NULL",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "UuidArray"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "d4668620b881e29ef78f6c13560ca3b3b56027cbc1af5461da1f80e4a4e05eb5"
+}

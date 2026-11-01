@@ -1,0 +1,100 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT DISTINCT ON (shard_index, parallel_index)\n                  id, shard_index, parallel_index, title, status, started_at, ended_at\n           FROM test_executions WHERE launch_id = $1\n           ORDER BY shard_index, parallel_index, started_at DESC",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "shard_index",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "shard_index"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "parallel_index",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "parallel_index"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "title",
+        "type_info": "Text",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "title"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "status",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "status"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "started_at",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "started_at"
+          }
+        }
+      },
+      {
+        "ordinal": 6,
+        "name": "ended_at",
+        "type_info": "Timestamptz",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "ended_at"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "9396ac8743956f1f90baa52481c62b758e8912bfc2798dc360fb1b77ad539a40"
+}

@@ -34,3 +34,8 @@ tower-http.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
 uuid.workspace = true
+
+[dev-dependencies]
+http-body-util = "0.1"
+reqwest = { version = "0.13", default-features = false, features = ["rustls", "json"] }
+tower = { version = "0.5", features = ["util"] }

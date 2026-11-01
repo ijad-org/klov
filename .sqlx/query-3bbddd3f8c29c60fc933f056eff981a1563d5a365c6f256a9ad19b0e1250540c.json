@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE test_steps s SET status = x.status, duration_ms = x.duration_ms,\n                       error_message = x.error_message, ended_at = x.ended_at\n                   FROM jsonb_to_recordset($1::jsonb) AS x(id uuid, status text, duration_ms int, error_message text,\n                        ended_at timestamptz)\n                   WHERE s.id = x.id",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Jsonb"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "3bbddd3f8c29c60fc933f056eff981a1563d5a365c6f256a9ad19b0e1250540c"
+}

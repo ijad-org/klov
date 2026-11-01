@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE test_executions SET status = 'interrupted', ended_at = $2\n         WHERE launch_id = $1 AND status = 'running' AND NOT superseded",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "12cd5683af593d922e85ec9764b636c2016dbc1ff6cb01404c82c58373f4f6f3"
+}

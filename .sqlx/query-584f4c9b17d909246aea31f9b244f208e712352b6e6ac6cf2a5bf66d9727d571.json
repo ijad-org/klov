@@ -1,0 +1,78 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "WITH recent AS (\n               SELECT id FROM launches WHERE project_id = $1 AND status <> 'running'\n               ORDER BY started_at DESC LIMIT $2)\n           SELECT e.fingerprint,\n                  (array_agg(e.title ORDER BY e.started_at DESC))[1] AS \"title!\",\n                  (array_agg(e.file_path ORDER BY e.started_at DESC))[1] AS \"file_path!\",\n                  (array_agg(e.browser_project ORDER BY e.started_at DESC))[1] AS \"browser_project!\",\n                  (array_agg(e.id ORDER BY e.started_at DESC))[1] AS \"last_execution_id!\",\n                  count(*) AS \"runs!\",\n                  count(*) FILTER (WHERE e.status = 'flaky') AS \"flaky!\",\n                  count(*) FILTER (WHERE e.status IN ('failed', 'timedOut', 'interrupted')) AS \"failed!\"\n           FROM test_executions e JOIN recent r ON r.id = e.launch_id\n           WHERE NOT e.superseded\n           GROUP BY e.fingerprint\n           HAVING count(*) FILTER (WHERE e.status = 'flaky') > 0\n           ORDER BY count(*) FILTER (WHERE e.status = 'flaky')::float / count(*) DESC, count(*) DESC\n           LIMIT 25",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "fingerprint",
+        "type_info": "Varchar",
+        "origin": {
+          "Table": {
+            "table": "test_executions",
+            "name": "fingerprint"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "title!",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 2,
+        "name": "file_path!",
+        "type_info": "Text",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 3,
+        "name": "browser_project!",
+        "type_info": "Varchar",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 4,
+        "name": "last_execution_id!",
+        "type_info": "Uuid",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 5,
+        "name": "runs!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 6,
+        "name": "flaky!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      },
+      {
+        "ordinal": 7,
+        "name": "failed!",
+        "type_info": "Int8",
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "hash": "584f4c9b17d909246aea31f9b244f208e712352b6e6ac6cf2a5bf66d9727d571"
+}

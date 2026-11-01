@@ -1,0 +1,88 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE launches l SET\n               passed_count = c.passed, failed_count = c.failed, flaky_count = c.flaky,\n               skipped_count = c.skipped, running_count = c.running,\n               total_tests = GREATEST(c.total, s.planned)\n           FROM (SELECT count(*) FILTER (WHERE status = 'passed')::int AS passed,\n                        count(*) FILTER (WHERE status IN ('failed', 'timedOut', 'interrupted'))::int AS failed,\n                        count(*) FILTER (WHERE status = 'flaky')::int AS flaky,\n                        count(*) FILTER (WHERE status = 'skipped')::int AS skipped,\n                        count(*) FILTER (WHERE status = 'running')::int AS running,\n                        count(*)::int AS total\n                 FROM test_executions WHERE launch_id = $1 AND NOT superseded) c,\n                (SELECT COALESCE(sum(total_tests), 0)::int AS planned FROM launch_shards WHERE launch_id = $1) s\n           WHERE l.id = $1\n           RETURNING l.total_tests, l.passed_count, l.failed_count, l.flaky_count, l.skipped_count, l.running_count",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "total_tests",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "total_tests"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "passed_count",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "passed_count"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "name": "failed_count",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "failed_count"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "name": "flaky_count",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "flaky_count"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "skipped_count",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "skipped_count"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "name": "running_count",
+        "type_info": "Int4",
+        "origin": {
+          "Table": {
+            "table": "launches",
+            "name": "running_count"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "032ebc1ff54dde2a750305773d12a23a9391c63aae3fda0ecf88311a7325bea8"
+}
