@@ -1,0 +1,36 @@
+[package]
+name = "klovplay-server"
+description = "KlovPlay server: real-time Playwright telemetry ingestion, analytics API and live dashboard host"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "klovplay-server"
+path = "src/main.rs"
+
+[dependencies]
+klovplay-schema.workspace = true
+anyhow.workspace = true
+axum.workspace = true
+aws-config.workspace = true
+aws-sdk-s3.workspace = true
+chrono.workspace = true
+clap.workspace = true
+dashmap.workspace = true
+futures.workspace = true
+hex.workspace = true
+rand.workspace = true
+regex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+sqlx.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tower-http.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+uuid.workspace = true

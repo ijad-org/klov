@@ -1,0 +1,4 @@
+# ts-rs resolves `#[ts(export_to = ...)]` paths against this directory, so the
+# paths in crates/schema stay relative to that crate.
+[env]
+TS_RS_EXPORT_DIR = { value = "crates/schema", relative = true }

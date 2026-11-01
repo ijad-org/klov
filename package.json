@@ -1,30 +1,17 @@
 {
-  "name": "klov",
+  "name": "klovplay",
   "private": true,
-  "description": "Klov — real-time test reporting server and dashboard for Playwright",
-  "license": "Apache-2.0",
-  "workspaces": [
-    "packages/shared",
-    "packages/server",
-    "packages/playwright-reporter",
-    "packages/web",
-    "examples/playwright-demo"
-  ],
+  "description": "KlovPlay: real-time Playwright reporting server and Allure-grade analytics",
+  "packageManager": "pnpm@10.28.0",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
-    "build": "npm run build -w @klov/shared && npm run build -w @klov/server -w @klov/playwright-reporter -w @klov/web",
-    "typecheck": "npm run typecheck --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present",
-    "dev:db": "bash scripts/dev-db.sh start",
-    "dev:server": "npm run dev -w @klov/server",
-    "dev:web": "npm run dev -w @klov/web",
-    "start": "npm run start -w @klov/server",
-    "demo": "npm run test:e2e -w klov-playwright-demo"
-  },
-  "devDependencies": {
-    "@types/node": "^22.10.0",
-    "typescript": "~5.9.3"
+    "codegen": "cargo test -p klovplay-schema",
+    "build": "pnpm -r --filter ./packages/** --filter ./apps/** run build",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r run test",
+    "dev:web": "pnpm --filter @klovplay/web dev",
+    "demo": "pnpm --filter klovplay-example test"
   }
 }

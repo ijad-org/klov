@@ -1,9 +1,15 @@
+# Rust
+/target/
+# Node
 node_modules/
 dist/
 *.tsbuildinfo
+# Local data and secrets
 .env
-.klov-data/
-.pgdata/
+.klovplay-data/
+# Playwright output
 test-results/
 playwright-report/
-coverage/
+blob-report/
+# Trace viewer assets are copied from playwright-core at build time
+apps/web/public/trace-viewer/
