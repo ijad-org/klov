@@ -579,3 +579,34 @@ async fn full_queue_is_answered_with_503(db: PgPool) {
     );
     app.send_ok(vec![start(&spec)]).await;
 }
+
+#[sqlx::test(migrator = "klovplay_server::MIGRATOR")]
+async fn runtime_annotations_replace_start_labels(db: PgPool) {
+    let app = test_app(db).await;
+    let launch_id = app.init_launch("run-labels", 1, 1, 1).await;
+    let spec = TestSpec {
+        launch_id,
+        execution_id: Uuid::new_v4(),
+        test_id: "t",
+        title: "labels",
+        file: "l.spec.ts",
+        project: "chromium",
+        retry: 0,
+        at: 0,
+    };
+    let mut finished = end(&spec, "passed", None);
+    if let TelemetryEvent::TestEnd { annotations, .. } = &mut finished {
+        *annotations = Some(klovplay_schema::AllureAnnotations {
+            owner: Some("payments-team".into()),
+            epic: Some("Checkout".into()),
+            ..Default::default()
+        });
+    }
+    app.send_ok(vec![start(&spec), finished]).await;
+    let execution = app
+        .get(&format!("/api/v1/executions/{}", spec.execution_id))
+        .await;
+    assert_eq!(execution["test"]["annotations"]["owner"], "payments-team");
+    assert_eq!(execution["test"]["annotations"]["epic"], "Checkout");
+    assert!(execution["test"]["annotations"]["severity"].is_null());
+}

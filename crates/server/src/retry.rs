@@ -1,6 +1,6 @@
 //! "Copy retry command" helpers.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 pub struct RetryTarget<'a> {
     pub file_path: &'a str,
@@ -24,17 +24,13 @@ fn shell_quote(value: &str) -> String {
 /// `file:line` targets exactly one test, unlike `-g "<title>"`, which is a regular
 /// expression and can match other tests with similar titles.
 pub fn retry_command<'a>(targets: impl IntoIterator<Item = RetryTarget<'a>>) -> Option<String> {
-    let mut by_project: BTreeMap<&str, Vec<String>> = BTreeMap::new();
+    // BTreeSet keeps locations unique and sorted by (file, line), so commands are stable.
+    let mut by_project: BTreeMap<&str, BTreeSet<(&str, i32)>> = BTreeMap::new();
     for target in targets {
-        let location = if target.line > 0 {
-            format!("{}:{}", target.file_path, target.line)
-        } else {
-            target.file_path.to_owned()
-        };
-        let locations = by_project.entry(target.browser_project).or_default();
-        if !locations.contains(&location) {
-            locations.push(location);
-        }
+        by_project
+            .entry(target.browser_project)
+            .or_default()
+            .insert((target.file_path, target.line));
     }
     if by_project.is_empty() {
         return None;
@@ -42,7 +38,17 @@ pub fn retry_command<'a>(targets: impl IntoIterator<Item = RetryTarget<'a>>) -> 
     let commands: Vec<String> = by_project
         .into_iter()
         .map(|(project, locations)| {
-            let files: Vec<String> = locations.iter().map(|l| shell_quote(l)).collect();
+            let files: Vec<String> = locations
+                .into_iter()
+                .map(|(file, line)| {
+                    let location = if line > 0 {
+                        format!("{file}:{line}")
+                    } else {
+                        file.to_owned()
+                    };
+                    shell_quote(&location)
+                })
+                .collect();
             let mut command = format!("npx playwright test {}", files.join(" "));
             if !project.is_empty() {
                 command.push_str(&format!(" --project={}", shell_quote(project)));
@@ -80,12 +86,17 @@ mod tests {
                 line: 12,
                 browser_project: "Mobile Safari",
             },
+            RetryTarget {
+                file_path: "tests/a.spec.ts",
+                line: 9,
+                browser_project: "chromium",
+            },
         ])
         .unwrap();
         assert_eq!(
             command,
             "npx playwright test tests/a.spec.ts:12 --project='Mobile Safari'\n\
-             npx playwright test tests/a.spec.ts:12 tests/b.spec.ts:3 --project=chromium"
+             npx playwright test tests/a.spec.ts:9 tests/a.spec.ts:12 tests/b.spec.ts:3 --project=chromium"
         );
     }
 

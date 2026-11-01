@@ -195,6 +195,7 @@ pub fn end(spec: &TestSpec, status: &str, error: Option<&str>) -> TelemetryEvent
         error_snippet: None,
         stdout: vec!["hello\n".into()],
         stderr: Vec::new(),
+        annotations: None,
         timestamp: ts(spec.at + 1500),
     }
 }

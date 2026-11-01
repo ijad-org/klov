@@ -1,0 +1,15 @@
+{
+  "name": "klovplay-example",
+  "private": true,
+  "description": "Sample Playwright suite that streams to a local KlovPlay server",
+  "scripts": {
+    "test": "playwright test",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@klovplay/playwright-reporter": "workspace:*",
+    "@playwright/test": "1.64.1",
+    "@types/node": "^22.10.0",
+    "typescript": "~5.9.3"
+  }
+}

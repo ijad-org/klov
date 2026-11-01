@@ -29,7 +29,12 @@ status: string, duration_ms: number, error_message?: string | null, error_stack?
 /**
  * Playwright's source snippet around the failing line (may contain ANSI colors).
  */
-error_snippet?: string | null, stdout: Array<string>, stderr: Array<string>, timestamp: string, } | { "type": "SHARD_END", launch_id: string, shard_index: number, 
+error_snippet?: string | null, stdout: Array<string>, stderr: Array<string>, 
+/**
+ * Labels as of the end of the test, including ones added at runtime
+ * (`test.info().annotations`). Replaces the TEST_START labels when present.
+ */
+annotations?: AllureAnnotations | null, timestamp: string, } | { "type": "SHARD_END", launch_id: string, shard_index: number, 
 /**
  * Playwright's final status for this shard: passed | failed | timedout | interrupted.
  */

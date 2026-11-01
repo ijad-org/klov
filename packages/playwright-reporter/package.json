@@ -1,0 +1,33 @@
+{
+  "name": "@klovplay/playwright-reporter",
+  "version": "0.1.0",
+  "description": "Streams Playwright test results to a KlovPlay server while tests run",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./annotations": {
+      "types": "./dist/annotations.d.ts",
+      "default": "./dist/annotations.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@playwright/test": ">=1.50.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/node": "^22.10.0",
+    "typescript": "~5.9.3",
+    "vitest": "^3.2.0"
+  }
+}

@@ -85,6 +85,11 @@ pub enum TelemetryEvent {
         error_snippet: Option<String>,
         stdout: Vec<String>,
         stderr: Vec<String>,
+        /// Labels as of the end of the test, including ones added at runtime
+        /// (`test.info().annotations`). Replaces the TEST_START labels when present.
+        #[serde(default)]
+        #[ts(optional = nullable)]
+        annotations: Option<AllureAnnotations>,
         timestamp: DateTime<Utc>,
     },
     ShardEnd {

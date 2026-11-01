@@ -13,5 +13,10 @@
     "test": "pnpm -r run test",
     "dev:web": "pnpm --filter @klovplay/web dev",
     "demo": "pnpm --filter klovplay-example test"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }

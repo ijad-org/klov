@@ -117,6 +117,7 @@ struct TestEndRow {
     error_cluster_hash: Option<String>,
     stdout: Vec<String>,
     stderr: Vec<String>,
+    annotations: Option<AllureAnnotations>,
     ended_at: DateTime<Utc>,
 }
 
@@ -386,6 +387,7 @@ impl Flusher {
                     error_snippet,
                     stdout,
                     stderr,
+                    annotations,
                     timestamp,
                 } => {
                     effects.launches.insert(*launch_id);
@@ -411,6 +413,7 @@ impl Flusher {
                             error_cluster_hash: hash,
                             stdout: clip_output(stdout),
                             stderr: clip_output(stderr),
+                            annotations: annotations.clone(),
                             ended_at: *timestamp,
                         },
                     );
@@ -514,10 +517,11 @@ impl Flusher {
                        status = CASE WHEN x.status = 'passed' AND t.retry_attempt > 0 THEN 'flaky' ELSE x.status END,
                        duration_ms = x.duration_ms, error_message = x.error_message, error_stack = x.error_stack,
                        error_snippet = x.error_snippet, error_cluster_hash = x.error_cluster_hash,
-                       stdout = x.stdout, stderr = x.stderr, ended_at = x.ended_at
+                       stdout = x.stdout, stderr = x.stderr, ended_at = x.ended_at,
+                       annotations = COALESCE(x.annotations, t.annotations)
                    FROM jsonb_to_recordset($1::jsonb) AS x(id uuid, status text, duration_ms int, error_message text,
                         error_stack text, error_snippet text, error_cluster_hash text, stdout text[], stderr text[],
-                        ended_at timestamptz)
+                        annotations jsonb, ended_at timestamptz)
                    WHERE t.id = x.id"#,
                 Json(&rows) as _
             )
