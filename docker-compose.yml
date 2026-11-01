@@ -1,0 +1,66 @@
+# KlovPlay local stack: PostgreSQL, S3-compatible storage (RustFS) and the server.
+#
+#   cp .env.example .env
+#   docker compose up -d
+#   open http://localhost:8080
+#
+# RustFS stands in for MinIO, whose images are no longer published. Any S3 API
+# works: point the S3_* variables at AWS S3, Cloudflare R2, Garage, etc.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-klovplay}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-klovplay}
+      POSTGRES_DB: ${POSTGRES_DB:-klovplay}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-klovplay} -d ${POSTGRES_DB:-klovplay}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  s3:
+    image: rustfs/rustfs:1.0.4
+    environment:
+      RUSTFS_ACCESS_KEY: ${S3_ACCESS_KEY_ID:-klovplay}
+      RUSTFS_SECRET_KEY: ${S3_SECRET_ACCESS_KEY:-klovplay-secret}
+      RUSTFS_CONSOLE_ENABLE: "true"
+    ports:
+      - "9000:9000" # S3 API (reporters upload here via pre-signed URLs)
+      - "9001:9001" # web console
+    volumes:
+      - s3data:/data
+
+  server:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+      s3:
+        condition: service_started
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-klovplay}:${POSTGRES_PASSWORD:-klovplay}@postgres:5432/${POSTGRES_DB:-klovplay}
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:8080}
+      ADMIN_TOKEN: ${ADMIN_TOKEN:?set ADMIN_TOKEN in .env}
+      S3_BUCKET: ${S3_BUCKET:-klovplay-artifacts}
+      S3_REGION: ${S3_REGION:-us-east-1}
+      S3_ENDPOINT: http://s3:9000
+      # Host-reachable endpoint used to sign URLs for reporters and browsers.
+      S3_PUBLIC_ENDPOINT: ${S3_PUBLIC_ENDPOINT:-http://localhost:9000}
+      S3_FORCE_PATH_STYLE: "true"
+      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-klovplay}
+      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-klovplay-secret}
+      # Create the bucket and its browser CORS rule on startup.
+      S3_ENSURE_BUCKET: "true"
+      RUST_LOG: ${RUST_LOG:-info}
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:
+  s3data:
