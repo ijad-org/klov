@@ -3,7 +3,7 @@
   "private": true,
   "description": "Sample Playwright suite that streams to a local KlovPlay server",
   "scripts": {
-    "test": "playwright test",
+    "demo": "playwright test",
     "typecheck": "tsc -p tsconfig.json"
   },
   "devDependencies": {

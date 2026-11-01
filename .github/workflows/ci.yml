@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: klovplay
+          POSTGRES_PASSWORD: klovplay
+          POSTGRES_DB: klovplay
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U klovplay"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+      s3:
+        image: rustfs/rustfs:1.0.4
+        env:
+          RUSTFS_ACCESS_KEY: klovplay
+          RUSTFS_SECRET_KEY: klovplay-secret
+        ports: ["9000:9000"]
+    env:
+      DATABASE_URL: postgres://klovplay:klovplay@localhost:5432/klovplay
+      SQLX_OFFLINE: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo test --workspace
+      - name: Generated TypeScript bindings are up to date
+        run: git diff --exit-code -- packages/playwright-reporter/src/generated apps/web/src/generated
+      - name: sqlx offline query data is up to date
+        run: |
+          cargo install sqlx-cli --version 0.9.0 --no-default-features --features postgres,rustls --locked
+          sqlx migrate run
+          SQLX_OFFLINE=false cargo sqlx prepare --workspace --check
+
+  node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -r run typecheck
+      - run: pnpm -r run test
+      - run: pnpm --filter @klovplay/playwright-reporter --filter @klovplay/web run build
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t klovplay:ci .

@@ -1,0 +1,9 @@
+.git
+target
+**/node_modules
+**/dist
+**/test-results
+**/playwright-report
+apps/web/public/trace-viewer
+.env
+.klovplay-data
